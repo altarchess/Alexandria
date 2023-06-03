@@ -596,16 +596,16 @@ moves_loop:
 				else if (singularBeta >= beta)
 					return (singularBeta);
 
+			} else if (depth < 8
+				&& !excludedMove
+				&& !in_check
+				&& move == tte.move
+				&& !root_node
+				&& ss->static_eval < alpha - 25
+				&& tte.flags == HFBETA) {
+				extension = 1;
 			}
-		} else if (depth < 8
-               && !excludedMove
-               && !in_check
-               && move == tte.move
-               && !root_node
-               && ss->static_eval < alpha - 25
-               && tte.flags == HFBETA) {
-            extension = 1;
-        }
+		}
 		
 		//we adjust the search depth based on potential extensions
 		int newDepth = depth + extension;
