@@ -596,7 +596,7 @@ moves_loop:
 				else if (singularBeta >= beta)
 					return (singularBeta);
 
-			} else if (depth < 8
+			} else if (depth < 7
 				&& !excludedMove
 				&& !in_check
 				&& move == tte.move
