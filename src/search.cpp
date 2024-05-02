@@ -561,8 +561,8 @@ moves_loop:
                     skipQuiets = true;
                 }
 
-				if (  !isTactical(move)
-					&& moveHistory < -8196 * depth) {
+				if (  isQuiet
+					&& moveHistory < -4096 * (depth + depth * depth)) {
 					skipQuiets = true;
 					continue;
 				}
