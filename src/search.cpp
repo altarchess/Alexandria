@@ -560,6 +560,10 @@ moves_loop:
                     && ss->staticEval + 250 + 150 * lmrDepth <= alpha) {
                     skipQuiets = true;
                 }
+
+				if (moveHistory < -8196 * depth)
+					continue;
+
             }
 
             // See pruning: prune all the moves that have a SEE score that is lower than our threshold
