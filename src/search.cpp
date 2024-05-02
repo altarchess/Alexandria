@@ -336,7 +336,7 @@ int AspirationWindowSearch(int prev_eval, int depth, ThreadData* td) {
 
 // Negamax alpha beta search
 template <bool pvNode>
-int Negamax(int alpha, int beta, int depth, const bool cutNode, ThreadData* td, SearchStack* ss) {
+int Negamax(int alpha, int beta, int depth, const bool cutNode, ThreadData* td, SearchStack* ss, int* lmr) {
     // Extract data structures from ThreadData
     Position* pos = &td->pos;
     SearchData* sd = &td->sd;
@@ -587,6 +587,12 @@ moves_loop:
                 ss->excludedMove = NOMOVE;
 
                 if (singularScore < singularBeta) {
+
+					if (lmr != nullptr && *lmr > 0) {
+						depth += *lmr;
+						*lmr = 0;
+					}
+
                     extension = 1;
                     // Avoid search explosion by limiting the number of double extensions
                     if (   !pvNode
@@ -659,10 +665,11 @@ moves_loop:
 
             int reducedDepth = newDepth - depthReduction;
             // search current move with reduced depth:
-            score = -Negamax<false>(-alpha - 1, -alpha, reducedDepth, true, td, ss + 1);
+            score = -Negamax<false>(-alpha - 1, -alpha, reducedDepth, true, td, ss + 1, &depthReduction);
 
             // if we failed high on a reduced node we'll search with a reduced window and full depth
-            if (score > alpha && newDepth > reducedDepth) {
+            if (score > alpha && depthReduction > 0) {
+				reducedDepth = newDepth - depthReduction;
                 // Based on the value returned by our reduced search see if we should search deeper or shallower, 
                 // this is an exact yoink of what SF does and frankly i don't care lmao
                 const bool doDeeperSearch = score > (bestScore + 53 + 2 * newDepth);

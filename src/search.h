@@ -49,7 +49,7 @@ void SearchPosition(int start_depth, int final_depth, ThreadData* td, UciOptions
 
 // Negamax alpha beta search
 template <bool pvNode>
-[[nodiscard]] int Negamax(int alpha, int beta, int depth, const bool cutNode, ThreadData* td, SearchStack* ss);
+[[nodiscard]] int Negamax(int alpha, int beta, int depth, const bool cutNode, ThreadData* td, SearchStack* ss, int* lmr = nullptr);
 
 // Quiescence search to avoid the horizon effect
 template <bool pvNode>
